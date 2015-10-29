@@ -13,26 +13,27 @@ public class UserManager {
     private List<User> users = new ArrayList<>();
 
     public User auth(String login, String password) throws AuthException {
-        if ((login == null) || (password == null)) {
-            throw new AuthException("Authentication exception!");
-        }
-        if (login.equals("") || password.equals("")) {
+        if ((login == null) || (password == null) || login.equals("") || password.equals("")) {
             throw new WrongCredentialsException("Login and password can't be empty!");
         }
+
         User authUser = new User(login, password);
+
         for (User user: users) {
-            switch (user.compareTo(authUser)) {
-                case 0:  return authUser;
-                case 1:  break; // login mismatch
-                case 2:  throw new WrongPasswrodException("Wrong password!"); // password mismatch
-                default: throw new AuthException("Authentication exception!");
+            if (login.equals(user.getLogin())) {
+                if (password.equals(user.getPassword())) {
+                    return authUser;
+                } else {
+                    throw new WrongPasswrodException("Wrong password!");
+                }
             }
         }
         throw new UserNotFoundException("User '" + login + "' not found!");
     }
 
-    public void addUser(String login, String password) {
-        if (login.equals("") || password.equals("")) {
+    public void addUser(String login, String password) throws WrongCredentialsException{
+        System.out.println(login);
+        if ((login == null) || (password == null) || login.equals("") || password.equals("")) {
             throw new WrongCredentialsException("Login or password is empty!");
         }
         users.add(new User(login, password));
@@ -41,9 +42,12 @@ public class UserManager {
     public static void testUserManager() {
         System.out.println("Testing user authentication ...");
         UserManager userManager = new UserManager();
-        userManager.addUser("john", "doe");
-        userManager.addUser("nick", "martin");
-
+        try {
+            userManager.addUser("john", "doe");
+            userManager.addUser("nick", "martin");
+        } catch (WrongCredentialsException e) {
+            e.getMessage();
+        }
         try {
             System.out.println(userManager.auth("john", "doe").toString()); // OK
             System.out.println(userManager.auth(null, null).toString());    // AuthException
@@ -51,7 +55,7 @@ public class UserManager {
             System.out.println(userManager.auth("j", "doe").toString());    // UserNotFoundException
             System.out.println(userManager.auth("", "").toString());        // WrongCredentialsException
         } catch (AuthException ae) {
-            System.out.println("Authentication exception!");
+            ae.getMessage();
         }
     }
 }
