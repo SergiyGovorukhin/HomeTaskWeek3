@@ -1,6 +1,6 @@
 package com.geekhub.hw3.user.exceptions;
 
-public class UserNotFoundException extends RuntimeException {
+public class UserNotFoundException extends AuthException {
 
     public UserNotFoundException() {
         super();

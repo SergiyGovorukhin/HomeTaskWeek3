@@ -1,6 +1,6 @@
 package com.geekhub.hw3.user.exceptions;
 
-public class WrongCredentialsException extends RuntimeException{
+public class WrongCredentialsException extends AuthException {
 
     public WrongCredentialsException() {
         super();

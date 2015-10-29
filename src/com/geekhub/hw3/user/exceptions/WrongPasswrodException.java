@@ -1,6 +1,6 @@
 package com.geekhub.hw3.user.exceptions;
 
-public class WrongPasswrodException extends RuntimeException {
+public class WrongPasswrodException extends AuthException {
 
     public WrongPasswrodException() {
         super();
